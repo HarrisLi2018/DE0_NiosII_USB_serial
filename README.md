@@ -39,3 +39,35 @@ python test_usb_crc_bidirectional.py COM8 --baud 3000000
 
 The test sends 10000 random bytes in both directions and checks the low byte of
 the payload sum as a simple CRC.
+
+In the PC terminal will look like below:
+```powershell
+D:\DE0_NiosII_USB_serial\tools>python test_usb_crc_bidirectional.py COM8 --baud 3000000
+Waiting for Nios->PC packet; sending START repeatedly until Nios responds...
+Nios->PC: count=10000 calc_crc=0xCB nios_crc=0xCB result=PASS
+Sending PC->Nios packet: count=10000 crc=0x82 chunk=4096 delay=0.0000s
+Nios console over USB: NIOS_RX PASS count=10000 calc=0x82 pc=0x82
+Overall result: PASS
+```
+and in the Nios console will show below:
+
+```powershell
+AvbusbCtrl USB bidirectional CRC test start
+USBCTRL_BASE=0x01000000
+CRC rule: low byte of sum of 10000 random bytes in range 1..255
+Timestamp timer: 100000000 Hz
+Initial STATUS=0x20000003 RX_EMPTY=1 TX_EMPTY=1 TX_FULL=0 RX_FULL=0 RX_USED=0 TX_USED=0 ERR=0 WERR=0 RERR=0
+Waiting for PC start header: START
+PC start header received
+Nios->PC random TX start: 10000 bytes
+Nios->PC TX done: count=10000 crc=0xcb sum_low=0xcb
+Nios->PC TX payload speed: bytes=10000 elapsed=11709 us rate=854011 B/s 6.832 Mbit/s
+Waiting for PC->Nios packet header: PC2NIOS
+PC->Nios packet header received
+PC->Nios random RX start: 10000 bytes
+PC->Nios RX done: count=10000 calc_crc=0x82 pc_crc=0x82 result=PASS
+PC->Nios RX payload speed: bytes=10000 elapsed=11252 us rate=888732 B/s 7.110 Mbit/s
+Final STATUS=0x20000003 RX_EMPTY=1 TX_EMPTY=1 TX_FULL=0 RX_FULL=0 RX_USED=0 TX_USED=0 ERR=0 WERR=0 RERR=0
+AvbusbCtrl USB bidirectional CRC test PASS
+```
+
