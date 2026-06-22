@@ -1,0 +1,54 @@
+# Quartus generated database and reports
+db/
+incremental_db/
+greybox_tmp/
+*.rpt
+*.summary
+*.smsg
+*.pin
+*.sof
+*.pof
+*.jic
+*.cdf
+*.qws
+PLLJ_PLLSPE_INFO.txt
+output_files/
+ip/output_files/
+
+# Qsys / Platform Designer generated scratch data
+.qsys_edit/
+*/.qsys_edit/
+*.sopcinfo
+
+# Nios II software build products
+**/obj/
+*.o
+*.d
+*.a
+*.elf
+*.objdump
+*.map
+
+# Common temporary/editor files
+*.bak
+*~
+*.old
+*.tmp
+*.log
+*.zip
+Thumbs.db
+.DS_Store
+
+# Unused local experiment projects kept in this working tree
+Qsys/qsys2*
+Qsys/qsys2/
+Qsys/software/Prj_OLED/
+Qsys/software/Prj_OLED_bsp/
+Qsys/software/Prj_OLED_Cpp/
+Qsys/software/Prj_OLED_Cpp_bsp/
+
+# Third-party example build outputs inside the USB CDC vendor tree
+ip/usb_cdc-main/examples/
+ip/usb_cdc-main/**/output/
+ip/usb_cdc-main/**/outputs/
+ip/usb_cdc-main/**/usb_cdc_Implmnt/

@@ -1,0 +1,32 @@
+	component DE0Qsys is
+		port (
+			clk_50m_clk       : in    std_logic                     := 'X';             -- clk
+			reset_reset_n     : in    std_logic                     := 'X';             -- reset_n
+			sdramclk_clk      : out   std_logic;                                        -- clk
+			sdram_wires_addr  : out   std_logic_vector(11 downto 0);                    -- addr
+			sdram_wires_ba    : out   std_logic_vector(1 downto 0);                     -- ba
+			sdram_wires_cas_n : out   std_logic;                                        -- cas_n
+			sdram_wires_cke   : out   std_logic;                                        -- cke
+			sdram_wires_cs_n  : out   std_logic;                                        -- cs_n
+			sdram_wires_dq    : inout std_logic_vector(15 downto 0) := (others => 'X'); -- dq
+			sdram_wires_dqm   : out   std_logic_vector(1 downto 0);                     -- dqm
+			sdram_wires_ras_n : out   std_logic;                                        -- ras_n
+			sdram_wires_we_n  : out   std_logic;                                        -- we_n
+			uart0_rxd         : in    std_logic                     := 'X';             -- rxd
+			uart0_txd         : out   std_logic;                                        -- txd
+			led_export        : out   std_logic_vector(9 downto 0);                     -- export
+			areset_export     : in    std_logic                     := 'X';             -- export
+			locked_export     : out   std_logic;                                        -- export
+			phasedone_export  : out   std_logic;                                        -- export
+			clk200m_clk       : out   std_logic;                                        -- clk
+			clk10m_clk        : out   std_logic;                                        -- clk
+			usbctrl_dp_pu_o   : out   std_logic;                                        -- dp_pu_o
+			usbctrl_tx_en_o   : out   std_logic;                                        -- tx_en_o
+			usbctrl_dp_tx_o   : out   std_logic;                                        -- dp_tx_o
+			usbctrl_dn_tx_o   : out   std_logic;                                        -- dn_tx_o
+			usbctrl_dp_rx_i   : in    std_logic                     := 'X';             -- dp_rx_i
+			usbctrl_dn_rx_i   : in    std_logic                     := 'X';             -- dn_rx_i
+			usbctrl_clk50_i   : in    std_logic                     := 'X'              -- clk50_i
+		);
+	end component DE0Qsys;
+
