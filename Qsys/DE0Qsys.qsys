@@ -29,7 +29,7 @@
    {
       datum baseAddress
       {
-         value = "128";
+         value = "96";
          type = "String";
       }
    }
@@ -106,7 +106,7 @@
    {
       datum baseAddress
       {
-         value = "50335776";
+         value = "50335744";
          type = "String";
       }
    }
@@ -118,19 +118,11 @@
          type = "String";
       }
    }
-   element uart0.s1
+   element timer.s1
    {
       datum baseAddress
       {
          value = "32";
-         type = "String";
-      }
-   }
-   element led.s1
-   {
-      datum baseAddress
-      {
-         value = "112";
          type = "String";
       }
    }
@@ -142,11 +134,27 @@
          type = "String";
       }
    }
-   element timer.s1
+   element usbctrl.s1
    {
       datum baseAddress
       {
          value = "64";
+         type = "String";
+      }
+   }
+   element uart0.s1
+   {
+      datum baseAddress
+      {
+         value = "0";
+         type = "String";
+      }
+   }
+   element led.s1
+   {
+      datum baseAddress
+      {
+         value = "80";
          type = "String";
       }
    }
@@ -210,7 +218,7 @@
  <parameter name="projectName" value="" />
  <parameter name="sopcBorderPoints" value="false" />
  <parameter name="systemHash" value="1" />
- <parameter name="timeStamp" value="1782028494033" />
+ <parameter name="timeStamp" value="1782270950361" />
  <parameter name="useTestBenchNamingPattern" value="false" />
  <instanceScript></instanceScript>
  <interface name="clk_50m" internal="clk_50M.clk_in" type="clock" dir="end" />
@@ -523,8 +531,8 @@
   <parameter name="tightlyCoupledInstructionMaster1AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster2AddrWidth" value="1" />
   <parameter name="tightlyCoupledInstructionMaster3AddrWidth" value="1" />
-  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='usbctrl.s1' start='0x1000000' end='0x1000010' /><slave name='uart0.s1' start='0x1000020' end='0x1000040' /><slave name='timer.s1' start='0x1000040' end='0x1000060' /><slave name='led.s1' start='0x1000070' end='0x1000080' /><slave name='jtag_uart.avalon_jtag_slave' start='0x1000080' end='0x1000088' /><slave name='sdram_ctrl.s1' start='0x2800000' end='0x3000000' /><slave name='nios2cpu.jtag_debug_module' start='0x3000800' end='0x3001000' /></address-map>]]></parameter>
-  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='usbctrl.s1' start='0x1000000' end='0x1000010' /><slave name='uart0.s1' start='0x1000020' end='0x1000040' /><slave name='timer.s1' start='0x1000040' end='0x1000060' /><slave name='led.s1' start='0x1000070' end='0x1000080' /><slave name='jtag_uart.avalon_jtag_slave' start='0x1000080' end='0x1000088' /><slave name='sdram_ctrl.s1' start='0x2800000' end='0x3000000' /><slave name='nios2cpu.jtag_debug_module' start='0x3000800' end='0x3001000' /><slave name='syspll.pll_slave' start='0x3001020' end='0x3001030' /></address-map>]]></parameter>
+  <parameter name="instSlaveMapParam"><![CDATA[<address-map><slave name='uart0.s1' start='0x1000000' end='0x1000020' /><slave name='timer.s1' start='0x1000020' end='0x1000040' /><slave name='usbctrl.s1' start='0x1000040' end='0x1000050' /><slave name='led.s1' start='0x1000050' end='0x1000060' /><slave name='jtag_uart.avalon_jtag_slave' start='0x1000060' end='0x1000068' /><slave name='sdram_ctrl.s1' start='0x2800000' end='0x3000000' /><slave name='nios2cpu.jtag_debug_module' start='0x3000800' end='0x3001000' /></address-map>]]></parameter>
+  <parameter name="dataSlaveMapParam"><![CDATA[<address-map><slave name='uart0.s1' start='0x1000000' end='0x1000020' /><slave name='timer.s1' start='0x1000020' end='0x1000040' /><slave name='usbctrl.s1' start='0x1000040' end='0x1000050' /><slave name='led.s1' start='0x1000050' end='0x1000060' /><slave name='jtag_uart.avalon_jtag_slave' start='0x1000060' end='0x1000068' /><slave name='sdram_ctrl.s1' start='0x2800000' end='0x3000000' /><slave name='nios2cpu.jtag_debug_module' start='0x3000800' end='0x3001000' /><slave name='syspll.pll_slave' start='0x3001000' end='0x3001010' /></address-map>]]></parameter>
   <parameter name="clockFrequency" value="100000000" />
   <parameter name="deviceFamilyName" value="Cyclone III" />
   <parameter name="internalIrqMaskSystemInfo" value="2147483655" />
@@ -651,6 +659,8 @@
  <module kind="AvbusbCtrl" version="1.0" enabled="1" name="usbctrl">
   <parameter name="fifodepth" value="256" />
   <parameter name="fifowidth" value="8" />
+  <parameter name="VID" value="1234" />
+  <parameter name="PID" value="4567" />
  </module>
  <connection
    kind="reset"
@@ -692,7 +702,7 @@
    start="nios2cpu.data_master"
    end="syspll.pll_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x03001020" />
+  <parameter name="baseAddress" value="0x03001000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -747,7 +757,7 @@
    start="APB.m0"
    end="jtag_uart.avalon_jtag_slave">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0080" />
+  <parameter name="baseAddress" value="0x0060" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -757,7 +767,7 @@
    end="timer.reset" />
  <connection kind="avalon" version="13.0" start="APB.m0" end="timer.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0040" />
+  <parameter name="baseAddress" value="0x0020" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -777,7 +787,7 @@
    end="uart0.reset" />
  <connection kind="avalon" version="13.0" start="APB.m0" end="uart0.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0020" />
+  <parameter name="baseAddress" value="0x0000" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection kind="reset" version="13.0" start="clk_50M.clk_reset" end="led.reset" />
@@ -788,7 +798,7 @@
    end="led.reset" />
  <connection kind="avalon" version="13.0" start="APB.m0" end="led.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0070" />
+  <parameter name="baseAddress" value="0x0050" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection
@@ -841,7 +851,7 @@
  </connection>
  <connection kind="avalon" version="13.0" start="APB.m0" end="usbctrl.s1">
   <parameter name="arbitrationPriority" value="1" />
-  <parameter name="baseAddress" value="0x0000" />
+  <parameter name="baseAddress" value="0x0040" />
   <parameter name="defaultConnection" value="false" />
  </connection>
  <connection

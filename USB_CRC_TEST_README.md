@@ -86,7 +86,7 @@ D:\prj\codex\DE0_NiosII_USB_serial\output_files\DE0_TOP.sof
 
    ```text
    AvbusbCtrl USB bidirectional CRC test start
-   USBCTRL_BASE=0x01000000
+   USBCTRL_BASE=0x01000040
    CRC rule: low byte of sum of 10000 random bytes in range 1..255
    Waiting for PC start header: START
    ```
@@ -118,7 +118,7 @@ Example:
 
 ```text
 AvbusbCtrl USB bidirectional CRC test start
-USBCTRL_BASE=0x01000000
+USBCTRL_BASE=0x01000040
 CRC rule: low byte of sum of 10000 random bytes in range 1..255
 Initial STATUS=0x20000003 RX_EMPTY=1 TX_EMPTY=1 TX_FULL=0 RX_FULL=0 RX_USED=0 TX_USED=0 ERR=0 WERR=0 RERR=0
 Waiting for PC start header: START

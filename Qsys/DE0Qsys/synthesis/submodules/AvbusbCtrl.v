@@ -48,7 +48,7 @@ module AvbusbCtrl(
             avs_s1_irq,
             
             /* Exported USB CDC clock and PHY interface. */
-            avs_export_clk50_i,
+            avs_export_Clk48M_i,               /* for USB clock */
             avs_export_dp_pu_o,                /* DP pull */
             avs_export_tx_en_o,                /* tri-state switch */
             avs_export_dp_tx_o,                /* D+ out */
@@ -63,6 +63,8 @@ module AvbusbCtrl(
 
 parameter        fifodepth=1024;
 parameter        fifowidth=8;
+parameter        VID=1234;
+parameter        PID=4567;
 
 //===========================================================================
 // PORT declarations
@@ -83,8 +85,8 @@ input       [3:0]   avs_s1_byteenable;          /* byte lane enable; DATA uses b
 output              avs_s1_irq;                 /* combined RX/TX/error interrupt */
 
 
-  // Exported USB PHY and reference-clock pins.
-input               avs_export_clk50_i;         /* 50 MHz reference clock for USB PLL */
+  // Exported USB PHY and CDC clock pins.
+input               avs_export_Clk48M_i;         /* 48 MHz USB CDC clock */
 output              avs_export_dp_pu_o;         /* USB D+ pull-up control */
 output              avs_export_tx_en_o;         /* USB D+/D- output-enable control */
 output              avs_export_dp_tx_o;         /* USB D+ transmit value */
@@ -408,18 +410,19 @@ usbfifo #(
     );
 
 // Local USB clock generator. The CDC core uses the 48 MHz output.
-usb_pll altpll_i(
-    .inclk0 (avs_export_clk50_i),
-    .c0     (clk48mhz),
-    .c1     (clk96mhz),
-    .c2     (clk12mhz),
-    .locked (clk_locked)
-    );
+//usb_pll altpll_i(
+//    .inclk0 (avs_export_Clk48M_i),
+//    .c0     (clk48mhz),
+//    .c1     (clk96mhz),
+//    .c2     (clk12mhz),
+//    .locked (clk_locked)
+//    );
+assign  clk48mhz = avs_export_Clk48M_i;
 
 // USB CDC ACM core. This module owns USB enumeration and bulk IN/OUT transfers.
 usb_cdc
-  #( .VENDORID              (16'h1234),
-     .PRODUCTID             (16'h5678),
+  #( .VENDORID              (VID),
+     .PRODUCTID             (PID),
      .IN_BULK_MAXPACKETSIZE ('d64),
      .OUT_BULK_MAXPACKETSIZE('d64),
      .BIT_SAMPLES           ('d4),

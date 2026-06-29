@@ -26,7 +26,7 @@
 			usbctrl_dn_tx_o   : out   std_logic;                                        -- dn_tx_o
 			usbctrl_dp_rx_i   : in    std_logic                     := 'X';             -- dp_rx_i
 			usbctrl_dn_rx_i   : in    std_logic                     := 'X';             -- dn_rx_i
-			usbctrl_clk50_i   : in    std_logic                     := 'X'              -- clk50_i
+			usbctrl_Clk48M_i  : in    std_logic                     := 'X'              -- Clk48M_i
 		);
 	end component DE0Qsys;
 

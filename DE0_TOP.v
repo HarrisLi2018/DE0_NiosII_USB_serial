@@ -214,7 +214,7 @@ inout	[31:0]	GPIO1_D;				//	GPIO Connection 1 Data Bus
 wire    wClk200M, wClk10M;
     DE0Qsys u0 (
         .clk_50m_clk       (CLOCK_50),      //     clk_50m.clk
-        .reset_reset_n     (BUTTON[0]),     //       reset.reset_n
+        .reset_reset_n     (usb_rstn),     //       reset.reset_n
 
         .clk200m_clk       (wClk200M),       //     clk200m.clk
         .clk10m_clk        (wClk10M),         //      clk10m.clk
@@ -247,16 +247,9 @@ wire    wClk200M, wClk10M;
         .usbctrl_dn_tx_o   (dn_tx_o),   //            .dn_tx_o
         .usbctrl_dp_rx_i   (GPIO0_D[19]),   //            .dp_rx_i
         .usbctrl_dn_rx_i   (GPIO0_D[18]),   //            .dn_rx_i
-        .usbctrl_clk50_i   (CLOCK_50_2)    //            .clk50_i
+        .usbctrl_Clk48M_i   (clk48mhz)    //            .clk50_i
     );
-//    // ---- to USB bus physical transmitters/receivers --------------
-//            .dp_pu_o(GPIO0_D[17]),  /* DP pull */
-//            .tx_en_o(tx_en_o),      /* tri-state switch */
-//            .dp_tx_o(dp_tx_o),      /* D+ out */
-//            .dn_tx_o(dn_tx_o),      /* D- out */
-//            .dp_rx_i(GPIO0_D[19]),  /* D+ in */
-//            .dn_rx_i(GPIO0_D[18])   /* D- in */
-//    );
+
 wire    tx_en_o, dp_tx_o, dn_tx_o;
 /* turn on D+ and D- to tri-state*/
 assign GPIO0_D[19] = tx_en_o ? dp_tx_o : 1'bz;
@@ -291,16 +284,16 @@ assign GPIO0_D[18] = tx_en_o ? dn_tx_o : 1'bz;
 
 /*  ==================usb_cdc-main run code ====================================== */ 
 
-//wire       clk48mhz, clk96mhz, clk12mhz;
-//wire       clk_locked;
-//
-//usb_pll altpll_i(
-//    .inclk0 (CLOCK_50_2),
-//    .c0     (clk48mhz),
-//    .c1     (clk96mhz),
-//    .c2     (clk12mhz),
-//    .locked (clk_locked)
-//    );
+wire       clk48mhz, clk96mhz, clk12mhz;
+wire       clk_locked;
+
+usb_pll altpll_i(
+    .inclk0 (CLOCK_50_2),
+    .c0     (clk48mhz),
+    .c1     (clk96mhz),
+    .c2     (clk12mhz),
+    .locked (clk_locked)
+    );
 wire [7:0] USB_RXDATA;
 wire       USB_RXDVAL;
 wire       USB_IN_READY;
@@ -313,92 +306,14 @@ wire        wFifoEmpty, wFifoEmpty2;
 wire        wUSBRdy;
 
 
-//assign usb_rstn = BUTTON[0] & clk_locked;
-assign usb_rstn = BUTTON[0];
-//assign LEDG[0] = clk_locked;
+assign usb_rstn = BUTTON[0] & clk_locked;
+//assign usb_rstn = BUTTON[0];
+assign LEDG[0] = clk_locked;
 //assign LEDG[1] = USB_CONFIGURED;
-//assign LEDG[9:2] = 8'h00;
+assign LEDG[9:2] = 8'h00;
 
 
-//usbfifo u_usbfifo_to_mcu(
-//    .aclr       (!usb_rstn),
-//    
-//    /* write side */
-//    .wrclk      (clk48mhz),
-//    .wrreq      (USB_RXDVAL & USB_IN_READY),
-//    .data       (USB_RXDATA),
-//    /* read side */
-//    .rdclk      (CLOCK_50_2),
-//    .rdreq      (!wFifoEmpty),
-//    .q          (wFifo_RdData),
-//
-//
-//    .rdempty    (wFifoEmpty),
-//    .wrfull      ()
-//    );
-//
-//usbfifo u_usbfifo_to_usb (
-//    .aclr       (!usb_rstn),
-//    /* write side */
-//    .wrclk      (CLOCK_50_2),
-//    .wrreq      (!wFifoEmpty),
-//    .data       (wFifo_RdData),
-//    /* read side */
-//    .rdclk      (clk48mhz),
-//    .rdreq      (!wFifoEmpty2 & USB_IN_READY),
-//    .q          (wFifo_ToUSBData),
-//
-//    .rdempty    (wFifoEmpty2),
-//    .wrfull     ()
-//    );
 
-//wire    wFifo_ToUSBDval;
-//usb_cdc
-//  #( .VENDORID              (16'h1234),
-//     .PRODUCTID             (16'h5678),
-//     .IN_BULK_MAXPACKETSIZE ('d64),
-//     .OUT_BULK_MAXPACKETSIZE('d64),
-//     .BIT_SAMPLES           ('d4),
-//     .USE_APP_CLK           (0),
-//     .APP_CLK_RATIO         ('d4))
-//   usb_cdc (
-//             .clk_i(clk48mhz),
-//    // clk_i clock shall have a frequency of 12MHz*BIT_SAMPLES
-//             .rstn_i(usb_rstn),
-//    // While rstn_i is low (active low), the module shall be reset
-//
-//    // ---- to/from Application ------------------------------------
-//             .app_clk_i     (CLOCK_50_2),
-//             .out_data_o    (USB_RXDATA),
-//             .out_valid_o   (USB_RXDVAL),
-//    // While out_valid_o is high, the out_data_o shall be valid and both
-//    //   out_valid_o and out_data_o shall not change until consumed.
-//             .out_ready_i   (USB_IN_READY),
-//    // When both out_valid_o and out_ready_i are high, the out_data_o shall
-//    //   be consumed.
-//             .in_data_i     (wFifo_ToUSBData),
-//             .in_valid_i    (wFifo_ToUSBDval),
-//    // While in_valid_i is high, in_data_i shall be valid.
-//             .in_ready_o    (USB_IN_READY),
-//    // When both in_ready_o and in_valid_i are high, in_data_i shall
-//    //   be consumed.
-//             .frame_o       (),
-//    // frame_o shall be last recognized USB frame number sent by USB host.
-//             .configured_o(USB_CONFIGURED),
-//    // While USB_CDC is in configured state, configured_o shall be high.
-//
-//    // ---- to USB bus physical transmitters/receivers --------------
-//            .dp_pu_o(GPIO0_D[17]),  /* DP pull */
-//            .tx_en_o(tx_en_o),      /* tri-state switch */
-//            .dp_tx_o(dp_tx_o),      /* D+ out */
-//            .dn_tx_o(dn_tx_o),      /* D- out */
-//            .dp_rx_i(GPIO0_D[19]),  /* D+ in */
-//            .dn_rx_i(GPIO0_D[18])   /* D- in */
-//    );
-//wire    tx_en_o, dp_tx_o, dn_tx_o;
-///* turn on D+ and D- to tri-state*/
-//assign GPIO0_D[19] = tx_en_o ? dp_tx_o : 1'bz;
-//assign GPIO0_D[18] = tx_en_o ? dn_tx_o : 1'bz;
 
 
 endmodule

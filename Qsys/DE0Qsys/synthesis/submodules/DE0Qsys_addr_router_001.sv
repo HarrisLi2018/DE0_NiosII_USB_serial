@@ -136,16 +136,16 @@ module DE0Qsys_addr_router_001
     // Figure out the number of bits to mask off for each slave span
     // during address decoding
     // -------------------------------------------------------
-    localparam PAD0 = log2ceil(64'h1000400 - 64'h1000000); 
-    localparam PAD1 = log2ceil(64'h3000000 - 64'h2800000); 
-    localparam PAD2 = log2ceil(64'h3001000 - 64'h3000800); 
-    localparam PAD3 = log2ceil(64'h3001030 - 64'h3001020); 
+    localparam PAD0 = log2ceil(64'h1000400 - 64'h1000000);
+    localparam PAD1 = log2ceil(64'h3000000 - 64'h2800000);
+    localparam PAD2 = log2ceil(64'h3001000 - 64'h3000800);
+    localparam PAD3 = log2ceil(64'h3001010 - 64'h3001000);
     // -------------------------------------------------------
     // Work out which address bits are significant based on the
     // address range of the slaves. If the required width is too
     // large or too small, we use the address field width instead.
     // -------------------------------------------------------
-    localparam ADDR_RANGE = 64'h3001030;
+    localparam ADDR_RANGE = 64'h3001010;
     localparam RANGE_ADDR_WIDTH = log2ceil(ADDR_RANGE);
     localparam OPTIMIZED_ADDR_H = (RANGE_ADDR_WIDTH > PKT_ADDR_W) ||
                                   (RANGE_ADDR_WIDTH == 0) ?
@@ -206,8 +206,8 @@ module DE0Qsys_addr_router_001
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 1;
     end
 
-    // ( 0x3001020 .. 0x3001030 )
-    if ( {address[RG:PAD3],{PAD3{1'b0}}} == 26'h3001020   ) begin
+    // ( 0x3001000 .. 0x3001010 )
+    if ( {address[RG:PAD3],{PAD3{1'b0}}} == 26'h3001000   ) begin
             src_channel = 4'b1000;
             src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 3;
     end

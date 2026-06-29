@@ -2,8 +2,8 @@
 <sch:Settings xmlns:sch="http://www.altera.com/embeddedsw/bsp/schema">
         <BspType>hal</BspType>
         <BspVersion>default</BspVersion>
-        <BspGeneratedTimeStamp>2026/6/21 下午 06:02:44</BspGeneratedTimeStamp>
-        <BspGeneratedUnixTimeStamp>1782036164041</BspGeneratedUnixTimeStamp>
+        <BspGeneratedTimeStamp>2026/6/24 下午 01:43:42</BspGeneratedTimeStamp>
+        <BspGeneratedUnixTimeStamp>1782279822326</BspGeneratedUnixTimeStamp>
         <BspGeneratedLocation>D:\prj\codex\DE0_NiosII_USB_serial\Qsys\software\usbserial_bsp</BspGeneratedLocation>
         <BspSettingsFile>settings.bsp</BspSettingsFile>
         <SopcDesignFile>D:\prj\codex\DE0_NiosII_USB_serial\Qsys\DE0Qsys.sopcinfo</SopcDesignFile>
@@ -887,32 +887,32 @@
                 <Group xsi:nil="true" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"/>
         </Setting>
         <MemoryMap>
-                <slaveDescriptor>usbctrl</slaveDescriptor>
-                <addressRange>0x01000000 - 0x0100000F</addressRange>
-                <addressSpan>16</addressSpan>
-                <attributes/>
-        </MemoryMap>
-        <MemoryMap>
                 <slaveDescriptor>uart0</slaveDescriptor>
-                <addressRange>0x01000020 - 0x0100003F</addressRange>
+                <addressRange>0x01000000 - 0x0100001F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>timer</slaveDescriptor>
-                <addressRange>0x01000040 - 0x0100005F</addressRange>
+                <addressRange>0x01000020 - 0x0100003F</addressRange>
                 <addressSpan>32</addressSpan>
                 <attributes>timer</attributes>
         </MemoryMap>
         <MemoryMap>
+                <slaveDescriptor>usbctrl</slaveDescriptor>
+                <addressRange>0x01000040 - 0x0100004F</addressRange>
+                <addressSpan>16</addressSpan>
+                <attributes/>
+        </MemoryMap>
+        <MemoryMap>
                 <slaveDescriptor>led</slaveDescriptor>
-                <addressRange>0x01000070 - 0x0100007F</addressRange>
+                <addressRange>0x01000050 - 0x0100005F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>jtag_uart</slaveDescriptor>
-                <addressRange>0x01000080 - 0x01000087</addressRange>
+                <addressRange>0x01000060 - 0x01000067</addressRange>
                 <addressSpan>8</addressSpan>
                 <attributes>printable</attributes>
         </MemoryMap>
@@ -924,7 +924,7 @@
         </MemoryMap>
         <MemoryMap>
                 <slaveDescriptor>syspll</slaveDescriptor>
-                <addressRange>0x03001020 - 0x0300102F</addressRange>
+                <addressRange>0x03001000 - 0x0300100F</addressRange>
                 <addressSpan>16</addressSpan>
                 <attributes/>
         </MemoryMap>

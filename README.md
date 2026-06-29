@@ -4,6 +4,18 @@ Quartus II / Nios II project for a DE0 FPGA board with a custom Avalon-MM USB
 CDC controller (`AvbusbCtrl`). The design connects a USB CDC full-speed core to
 Nios II through Avalon registers and asynchronous FIFOs.
 
+## Latest Update (2026-06-29)
+
+- Moved USB CDC clock generation to the top-level `DE0_TOP.v` design and feed
+  the generated 48 MHz clock into Qsys through the `usbctrl_Clk48M_i` conduit.
+- Reset the Qsys system with `usb_rstn`, which is released only after the USB
+  PLL locks; `LEDG[0]` now shows the USB PLL lock status.
+- Updated `AvbusbCtrl` so the USB CDC core consumes the external 48 MHz clock
+  directly instead of instantiating its own local USB PLL.
+- Added Qsys parameters for USB CDC VID/PID and regenerated Qsys synthesis,
+  address router, and BSP files. The USB controller base address is now
+  `0x01000040`.
+
 ## Main Files
 
 - `ip/AvbusbCtrl.v` - Avalon-MM USB CDC controller

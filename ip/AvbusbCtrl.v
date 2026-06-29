@@ -48,7 +48,7 @@ module AvbusbCtrl(
             avs_s1_irq,
             
             /* Exported USB CDC clock and PHY interface. */
-            avs_export_clk50_i,
+            avs_export_Clk48M_i,               /* for USB clock */
             avs_export_dp_pu_o,                /* DP pull */
             avs_export_tx_en_o,                /* tri-state switch */
             avs_export_dp_tx_o,                /* D+ out */
@@ -85,8 +85,8 @@ input       [3:0]   avs_s1_byteenable;          /* byte lane enable; DATA uses b
 output              avs_s1_irq;                 /* combined RX/TX/error interrupt */
 
 
-  // Exported USB PHY and reference-clock pins.
-input               avs_export_clk50_i;         /* 50 MHz reference clock for USB PLL */
+  // Exported USB PHY and CDC clock pins.
+input               avs_export_Clk48M_i;         /* 48 MHz USB CDC clock */
 output              avs_export_dp_pu_o;         /* USB D+ pull-up control */
 output              avs_export_tx_en_o;         /* USB D+/D- output-enable control */
 output              avs_export_dp_tx_o;         /* USB D+ transmit value */
@@ -138,7 +138,7 @@ wire                usb_cdc_configured;         /* raw configured flag in USB cl
 wire                clk48mhz;                   /* USB full-speed sample clock */
 wire                clk96mhz;                   /* currently unused PLL output */
 wire                clk12mhz;                   /* currently unused PLL output */
-wire                clk_locked;                 /* raw PLL lock flag */
+//wire                clk_locked;                 /* raw PLL lock flag */
 wire                usb_core_reset_n;           /* USB core reset, released after PLL lock */
 wire                usb_fifo_aclr;              /* asynchronous FIFO clear */
 
@@ -228,7 +228,7 @@ assign avl_write_accept = avs_s1_write & !avs_s1_waitrequest;
 assign avl_read_accept = avs_s1_read & !avs_s1_waitrequest;
 
 // Hold USB logic and FIFOs in reset until the local USB PLL is locked.
-assign usb_core_reset_n = csi_clockreset_reset_n & clk_locked;
+assign usb_core_reset_n = csi_clockreset_reset_n;// & clk_locked;
 assign usb_fifo_aclr = !usb_core_reset_n;
 
 // Publish conservative STATUS values until the USB/FIFO path is stable.
@@ -254,7 +254,7 @@ always@(posedge csi_clockreset_clk or negedge csi_clockreset_reset_n) begin
         fifo_error_flag_clear_reg <= 1'b0;
         avl_data_write_error_latch <= 1'b0;
         avl_data_read_error_latch  <= 1'b0;
-        avl_clk_locked_sync        <= 2'b00;
+//        avl_clk_locked_sync        <= 2'b00;
         usb_cdc_configured_sync    <= 2'b00;
         avl_to_usb_fifo_empty_sync <= 2'b11;
         usb_to_avl_fifo_full_sync  <= 2'b00;
@@ -272,16 +272,17 @@ always@(posedge csi_clockreset_clk or negedge csi_clockreset_reset_n) begin
         end
 
         // Synchronize USB-domain status bits before software reads them.
-        avl_clk_locked_sync        <= {avl_clk_locked_sync[0], clk_locked};
+//        avl_clk_locked_sync        <= {avl_clk_locked_sync[0], clk_locked};
         usb_cdc_configured_sync    <= {usb_cdc_configured_sync[0], usb_cdc_configured};
         avl_to_usb_fifo_empty_sync <= {avl_to_usb_fifo_empty_sync[0], avl_to_usb_fifo_empty};
         usb_to_avl_fifo_full_sync  <= {usb_to_avl_fifo_full_sync[0], usb_to_avl_fifo_full};
 
         // After PLL lock, wait for FIFO flags to settle before allowing DATA writes.
-        if (!avl_clk_locked_sync[1]) begin
-            avl_usb_ready_delay_cnt <= 8'd0;
-        end
-        else if (!avl_usb_ready) begin
+//        if (!avl_clk_locked_sync[1]) begin
+//            avl_usb_ready_delay_cnt <= 8'd0;
+//        end
+//        else
+        if (!avl_usb_ready) begin
             avl_usb_ready_delay_cnt <= avl_usb_ready_delay_cnt + 8'd1;
         end
 
@@ -410,13 +411,14 @@ usbfifo #(
     );
 
 // Local USB clock generator. The CDC core uses the 48 MHz output.
-usb_pll altpll_i(
-    .inclk0 (avs_export_clk50_i),
-    .c0     (clk48mhz),
-    .c1     (clk96mhz),
-    .c2     (clk12mhz),
-    .locked (clk_locked)
-    );
+//usb_pll altpll_i(
+//    .inclk0 (avs_export_Clk48M_i),
+//    .c0     (clk48mhz),
+//    .c1     (clk96mhz),
+//    .c2     (clk12mhz),
+//    .locked (clk_locked)
+//    );
+assign  clk48mhz = avs_export_Clk48M_i;
 
 // USB CDC ACM core. This module owns USB enumeration and bulk IN/OUT transfers.
 usb_cdc
@@ -434,7 +436,7 @@ usb_cdc
     // While rstn_i is low (active low), the module shall be reset
 
     // ---- to/from Application ------------------------------------
-             .app_clk_i     (clk48mhz),
+             .app_clk_i     (csi_clockreset_clk),
              .out_data_o    (usb_cdc_rx_data),
              .out_valid_o   (usb_cdc_rx_valid),
     // While out_valid_o is high, the out_data_o shall be valid and both

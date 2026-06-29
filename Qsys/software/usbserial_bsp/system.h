@@ -4,7 +4,7 @@
  * Machine generated for CPU 'nios2cpu' in SOPC Builder design 'DE0Qsys'
  * SOPC Builder design path: D:/prj/codex/DE0_NiosII_USB_serial/Qsys/DE0Qsys.sopcinfo
  *
- * Generated: Sun Jun 21 16:10:43 CST 2026
+ * Generated: Wed Jun 24 13:43:46 CST 2026
  */
 
 /*
@@ -153,19 +153,19 @@
 #define ALT_NUM_INTERNAL_INTERRUPT_CONTROLLERS 1
 #define ALT_NUM_INTERRUPT_CONTROLLERS 1
 #define ALT_STDERR "/dev/jtag_uart"
-#define ALT_STDERR_BASE 0x1000080
+#define ALT_STDERR_BASE 0x1000060
 #define ALT_STDERR_DEV jtag_uart
 #define ALT_STDERR_IS_JTAG_UART
 #define ALT_STDERR_PRESENT
 #define ALT_STDERR_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDIN "/dev/jtag_uart"
-#define ALT_STDIN_BASE 0x1000080
+#define ALT_STDIN_BASE 0x1000060
 #define ALT_STDIN_DEV jtag_uart
 #define ALT_STDIN_IS_JTAG_UART
 #define ALT_STDIN_PRESENT
 #define ALT_STDIN_TYPE "altera_avalon_jtag_uart"
 #define ALT_STDOUT "/dev/jtag_uart"
-#define ALT_STDOUT_BASE 0x1000080
+#define ALT_STDOUT_BASE 0x1000060
 #define ALT_STDOUT_DEV jtag_uart
 #define ALT_STDOUT_IS_JTAG_UART
 #define ALT_STDOUT_PRESENT
@@ -189,7 +189,7 @@
  */
 
 #define ALT_MODULE_CLASS_jtag_uart altera_avalon_jtag_uart
-#define JTAG_UART_BASE 0x1000080
+#define JTAG_UART_BASE 0x1000060
 #define JTAG_UART_IRQ 0
 #define JTAG_UART_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define JTAG_UART_NAME "/dev/jtag_uart"
@@ -207,7 +207,7 @@
  */
 
 #define ALT_MODULE_CLASS_led altera_avalon_pio
-#define LED_BASE 0x1000070
+#define LED_BASE 0x1000050
 #define LED_BIT_CLEARING_EDGE_REGISTER 0
 #define LED_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LED_CAPTURE 0
@@ -273,7 +273,7 @@
  */
 
 #define ALT_MODULE_CLASS_syspll altpll
-#define SYSPLL_BASE 0x3001020
+#define SYSPLL_BASE 0x3001000
 #define SYSPLL_IRQ -1
 #define SYSPLL_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSPLL_NAME "/dev/syspll"
@@ -288,7 +288,7 @@
 
 #define ALT_MODULE_CLASS_timer altera_avalon_timer
 #define TIMER_ALWAYS_RUN 0
-#define TIMER_BASE 0x1000040
+#define TIMER_BASE 0x1000020
 #define TIMER_COUNTER_SIZE 32
 #define TIMER_FIXED_PERIOD 0
 #define TIMER_FREQ 100000000
@@ -313,7 +313,7 @@
  */
 
 #define ALT_MODULE_CLASS_uart0 altera_avalon_uart
-#define UART0_BASE 0x1000020
+#define UART0_BASE 0x1000000
 #define UART0_BAUD 115200
 #define UART0_DATA_BITS 8
 #define UART0_FIXED_BAUD 1
@@ -338,7 +338,7 @@
  */
 
 #define ALT_MODULE_CLASS_usbctrl AvbusbCtrl
-#define USBCTRL_BASE 0x1000000
+#define USBCTRL_BASE 0x1000040
 #define USBCTRL_IRQ 2
 #define USBCTRL_IRQ_INTERRUPT_CONTROLLER_ID 0
 #define USBCTRL_NAME "/dev/usbctrl"
